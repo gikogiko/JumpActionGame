@@ -127,7 +127,7 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
             mStars[i].draw(mGame.batch)
         }
 
-        //Star
+        //Enemy
         for (i in 0 until mEnemies.size) {
             mEnemies[i].draw(mGame.batch)
         }
@@ -285,6 +285,21 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
             }
         }
 
+        //Enemyとの当たり判定
+        for (i in 0 until mEnemies.size) {
+            val enemy = mEnemies[i]
+
+            if (mPlayer.boundingRectangle.overlaps((enemy.boundingRectangle))) {
+                //衝突音
+                mSound.play(1.0f)
+
+                //GameOver
+                mGameState = GAME_STATE_GAMEOVER
+
+                break
+            }
+        }
+        
         //Stepとの当たり判定
         //上昇中はStepとの当たり判定を確認しない
         if (mPlayer.velocity.y > 0) {
@@ -305,21 +320,6 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
                         step.vanish()
                     }
                 }
-            }
-        }
-
-        //Enemyとの当たり判定
-        for (i in 0 until mEnemies.size) {
-            val enemy = mEnemies[i]
-
-            if (mPlayer.boundingRectangle.overlaps((enemy.boundingRectangle))) {
-                //衝突音
-                mSound.play(1.0f)
-
-                //GameOver
-                mGameState = GAME_STATE_GAMEOVER
-
-                break
             }
         }
     }
